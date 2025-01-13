@@ -8,9 +8,23 @@ namespace Infrastructure.Data;
 public class ProductRepository(StoreContext context) : IProductRepository
 {
 
-    public async Task<IReadOnlyList<Product>> GetProductsAsync()
+    public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type)
     {
-        return await context.Products.ToListAsync();
+        var query = context.Products.AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(brand))
+        {
+            query = query.Where(p => p.Brand == brand);
+        }
+
+        if (!string.IsNullOrWhiteSpace(type))
+        {
+            query = query.Where(p => p.Type == type);
+        }
+
+        query = query.OrderBy(p => p.Id);
+
+        return await query.ToListAsync();
     }
 
     public async Task<Product?> GetProductByIdAsync(int id)
