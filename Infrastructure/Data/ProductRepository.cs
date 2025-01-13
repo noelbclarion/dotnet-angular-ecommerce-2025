@@ -33,6 +33,16 @@ public class ProductRepository(StoreContext context) : IProductRepository
         context.Products.Remove(product);
     }
 
+    public async Task<IReadOnlyList<string>> GetProductBrandsAsync()
+    {
+        return await context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<string>> GetProductTypesAsync()
+    {
+        return await context.Products.Select(p => p.Type).Distinct().ToListAsync();
+    }
+
     public bool ProductExists(int id)
     {
         return context.Products.Any(p => p.Id == id);

@@ -62,6 +62,20 @@ public class ProductsController(IProductRepository _productRepository) : Control
         return BadRequest("Failed to delete product");
     }
 
+    [HttpGet("brands")]
+    public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
+    {
+        var brands = await _productRepository.GetProductBrandsAsync();
+        return Ok(brands);
+    }
+
+    [HttpGet("types")]
+    public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
+    {
+        var types = await _productRepository.GetProductTypesAsync();
+        return Ok(types);
+    }
+
     private bool ProductExists(int id)
     {
         return _productRepository.ProductExists(id);
