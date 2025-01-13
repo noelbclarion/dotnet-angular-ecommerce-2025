@@ -12,9 +12,9 @@ public class ProductsController(IProductRepository _productRepository) : Control
 {
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery] string? brand, [FromQuery] string? type)
+    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
     {
-        var products = await _productRepository.GetProductsAsync(brand, type);
+        var products = await _productRepository.GetProductsAsync(brand, type, sort);
         return Ok(products);
     }
 
