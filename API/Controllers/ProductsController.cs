@@ -15,7 +15,7 @@ public class ProductsController(IGenericRepository<Product> _productRepository) 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
     {
-        var spec = new ProductFilterSortPaginationSpecification(brand, type);
+        var spec = new ProductFilterSortPaginationSpecification(brand, type, sort);
         var products = await _productRepository.ListAsync(spec);
 
         return Ok(products);
