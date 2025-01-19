@@ -7,14 +7,6 @@ namespace Infrastructure.Data;
 
 public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> where T : BaseEntity
 {
-    // private readonly StoreContext _context;
-    // private readonly DbSet<T> _entities;
-
-    // public GenericRepository(StoreContext context)
-    // {
-    //     _context = context;
-    //     _entities = context.Set<T>();
-    // }
 
     public void Add(T entity)
     {
@@ -37,18 +29,32 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
         return await context.SaveChangesAsync() > 0;
     }
 
+    public async Task<T?> GetEntityWithSpec(ISpecification<T> spec)
+    {
+        return await ApplySpecification(spec).FirstOrDefaultAsync();
+    }
+    public async Task<IReadOnlyList<T>> ListAllAsync()
+    {
+        return await context.Set<T>().ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+    {
+        return await ApplySpecification(spec).ToListAsync();
+    }
+
     public bool Exists(int id)
     {
         return context.Set<T>().Any(e => e.Id == id);
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public async Task<T?> GetByIdAsync(int id)
     {
         return await context.Set<T>().FindAsync(id);
     }
 
-    public async Task<IReadOnlyList<T>> ListAllAsync()
+    private IQueryable<T> ApplySpecification(ISpecification<T> spec)
     {
-        return await context.Set<T>().ToListAsync();
+        return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), spec);
     }
 }
