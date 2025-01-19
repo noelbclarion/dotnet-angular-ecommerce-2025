@@ -1,6 +1,8 @@
 using System;
 using Core.Entities;
-
+using Core.Interfaces;
+using Core.Specifications;
+using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Data;
 
 public class SpecificationEvaluator<T> where T : BaseEntity

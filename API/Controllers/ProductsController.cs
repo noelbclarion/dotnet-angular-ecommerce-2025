@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
+using Core.Specifications;
 
 namespace API.Controllers;
 
@@ -14,7 +15,9 @@ public class ProductsController(IGenericRepository<Product> _productRepository) 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
     {
-        var products = await _productRepository.ListAllAsync();
+        var spec = new ProductFilterSortPaginationSpecification(brand, type);
+        var products = await _productRepository.ListAsync(spec);
+
         return Ok(products);
     }
 
