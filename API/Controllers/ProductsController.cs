@@ -4,6 +4,7 @@ using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.CodeAnalysis;
 
 namespace API.Controllers;
 [ApiController]
@@ -67,17 +68,15 @@ public class ProductsController(IGenericRepository<Product> _productRepository) 
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
     {
-        // TODO: Refactor this to use the generic repository
-        // var brands = await _productRepository.GetProductBrandsAsync();
-        return Ok();
+        var spec = new BrandListSpecification();
+        return Ok(await _productRepository.ListAsync(spec));
     }
 
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
     {
-        // TODO: Refactor this to use the generic repository
-        // var types = await _productRepository.GetProductTypesAsync();
-        return Ok();
+        var spec = new TypeListSpecification();
+        return Ok(await _productRepository.ListAsync(spec));
     }
 
     private bool ProductExists(int id)
