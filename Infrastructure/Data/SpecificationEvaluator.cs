@@ -1,4 +1,5 @@
 using System;
+using System.Reflection.Metadata;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
@@ -27,5 +28,34 @@ public class SpecificationEvaluator<T> where T : BaseEntity
         }
 
         return query;
+    }
+
+    public static IQueryable<TResult> GetQuery<TSpec, TResult>(IQueryable<T> inputQuery, ISpecification<T, TResult> spec)
+    {
+        var query = inputQuery;
+
+        if (spec.Criteria != null)
+        {
+            query = query.Where(spec.Criteria); // x.Brand == "brand"
+        }
+
+        if (spec.OrderBy != null)
+        {
+            query = query.OrderBy(spec.OrderBy);
+        }
+
+        if (spec.OrderByDescending != null)
+        {
+            query = query.OrderByDescending(spec.OrderByDescending);
+        }
+
+        var selectQuery = query as IQueryable<TResult>;
+
+        if(spec.Select != null)
+        {
+            selectQuery = query.Select(spec.Select);
+        }
+
+        return selectQuery ?? query.Cast<TResult>();
     }
 }

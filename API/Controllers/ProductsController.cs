@@ -6,7 +6,6 @@ using Core.Interfaces;
 using Core.Specifications;
 
 namespace API.Controllers;
-
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController(IGenericRepository<Product> _productRepository) : ControllerBase
