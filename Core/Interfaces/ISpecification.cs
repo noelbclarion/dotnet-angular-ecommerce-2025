@@ -10,7 +10,8 @@ public interface ISpecification<T>
     bool IsDistinct { get; }
     int Take { get; }
     int Skip { get; }
-    bool IsPagingEnabled { get; }    
+    bool IsPagingEnabled { get; }
+    IQueryable ApplyCriteria(IQueryable<T> query);    
 }
 
 public interface ISpecification<T, TResult> : ISpecification<T>

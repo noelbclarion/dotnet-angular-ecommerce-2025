@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.CodeAnalysis;
+using API.RequestHelpers;
 
 namespace API.Controllers;
 [ApiController]
@@ -17,8 +18,11 @@ public class ProductsController(IGenericRepository<Product> _productRepository) 
     {
         var spec = new ProductFilterSortPaginationSpecification(specParams);
         var products = await _productRepository.ListAsync(spec);
+        var count = await _productRepository.CountAsync(spec);
 
-        return Ok(products);
+        var pagination =  new Pagination<Product>(specParams.PageIndex, specParams.PageSize, count, products);
+
+        return Ok(pagination);
     }
 
     [HttpGet("{id:int}")]
