@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Reflection.Metadata;
 
 namespace Core.Specifications;
@@ -38,4 +39,12 @@ public class ProductSpecParams
     }
 
     public string? Sort { set; get; }
+
+    private string? _search;
+    public string Search
+    {
+        get => _search?? "";
+        set => _search = value.ToLower();
+    }
+    
 }
