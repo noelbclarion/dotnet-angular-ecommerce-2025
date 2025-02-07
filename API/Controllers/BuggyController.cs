@@ -1,4 +1,5 @@
 using System;
+using API.DTOs;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +32,7 @@ public class BuggyController : BaseAPIController
     }
 
     [HttpPost("validationerror")]
-    public IActionResult GeValidationError(Product product)
+    public IActionResult GeValidationError(CreateProductDto product)
     {
         return Ok();
     }
